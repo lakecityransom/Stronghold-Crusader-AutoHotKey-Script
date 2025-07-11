@@ -1,0 +1,38 @@
+; This script requires you to install Autohotkey https://www.autohotkey.com/
+; When you run it, you should see it in system tray menu. Right click it for options.
+; If you want to change hotkeys, look here. Keys like shift, ctrl, alt are explained in "modifier keys" section. https://www.autohotkey.com/docs/KeyList.htm
+
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases
+SendMode InputThenPlay  ; Recommended for its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent working directory.
+SetDefaultMouseSpeed, 0  ; Makes mouse operations instantaneous movement
+
+; MMB hotkey — Checks that middle mouse button is pressed and continuously spams clicks
+Loop {
+    #IfWinActive, Crusader
+    GetKeyState, state, MButton
+    if (state = "D") {
+        SendEvent {LButton}
+    }
+    Sleep, 50
+}
+
+; CTRL+S hotkey — Hit unit stop command (coordinates are in 1024x768 mode)
+^s::
+    #IfWinActive, Crusader
+    SendEvent {Click 177, 710}
+return
+
+; CTRL+F hotkey — Save click location (use this while mouse is over an engineer's siege equipment build button)
+^f::
+    #IfWinActive, Crusader
+    MouseGetPos, originX, originY
+return
+
+; CTRL+D hotkey — Press the saved click location and then click at the current mouse location (clicks your saved siege choice and then clicks where you are hovering your mouse on the map)
+^d::
+    #IfWinActive, Crusader
+    MouseGetPos, submitSpotX, submitSpotY
+    SendEvent {Click %originX%, %originY%}
+    SendEvent {Click %submitSpotX%, %submitSpotY%}
+return
